@@ -1,12 +1,22 @@
 sudo apt update
-sudo apt full-upgrade -y
-sudo apt install ansible git -y
+sudo apt git -y \
+        install \
+        ansible \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        gnupg \
+        lsb-release
 
-
-cd ~/developer
-# TODO: if not exists
-git clone https://github.com/PX4/PX4-Autopilot.git --recursive
-bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
+WORK_DIR = $HOME/developer
+mkdir -p $WORK_DIR cd $WORK_DIR
+if [ -d "$WORK_DIR" ]; then
+    echo "PX4 already exists in the developer directory."
+    echo "Skipping..."
+else
+    git clone https://github.com/PX4/PX4-Autopilot.git --recursive
+    bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
+fi
 
 # Docker install
 
@@ -41,13 +51,3 @@ sudo apt install libfuse2 -y
 sudo apt install libxcb-xinerama0 libxkbcommon-x11-0 libxcb-cursor0 -y
 
 wget -p $HOME/developer https://d176tv9ibo4jno.cloudfront.net/latest/QGroundControl.AppImage
-
-#mkdir developer && cd $_ 
-
-
-## TODO: dev machine setup
-#git clone https://github.com/fazlearefin/ubuntu-dev-machine-setup.git
-#cd ubuntu-dev-machine-setup
-
-# todo: argin for laptop mode
-#ansible-playbook main.yml -vv -e "{ laptop_mode: True }" -e "local_username=$(id -un)" -K
